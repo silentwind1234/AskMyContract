@@ -46,6 +46,7 @@ if file is not None:
             answerArea.empty()
             answerArea.info("Please Wait...")
             pdf.loadPages()
+            # st.code(f'''Total Cost ${pdf.getCost()}''')
             pdf.createEmbeddings()
             answerArea.empty()
             answerArea.info("File Ready. Please ask you question!")
@@ -62,19 +63,14 @@ if askBtn and pdfFileValid and len(questionArea) > 0 and ready:
     Contract Page:
     {page}
     
-    The above contract page is part of a contract between Siemens energy (as the contractor) and the Owner, Please answer with summerized legal risks if any that would be recognized by Siemens energy for the above contract clause based on the below Siemens energy Baseline requirements.
+    The above contract page is part of a contract between Siemens energy (as the contractor) and the Owner.
 
-    Baseline requirements:
     {questionArea}
     Answer:"""
     promptObj = Prompt()
 
     answer = promptObj.run_prompt(prompt)
-    prompt = f"""
-     Please summerize the following:
-      {answer}
-    """
-    answer = promptObj.summerizeAnswer(prompt)
+    
     answerArea.empty()
     answerArea.info(answer)
     

@@ -45,13 +45,22 @@ class pdfFile:
         for doc in self.pages:
             num_tokens = len(encoding.encode(doc))
             totalTokens += num_tokens
-        return totalTokens
+        return totalTokens*0.0004/1000
     
     def createEmbeddings(self):
-        self.embeddings = []
-        for page in self.pages:
-            response = openai.Embedding.create(input=page, engine='text-embedding-ada-002')    
-            self.embeddings.append(response['data'][0]['embedding'])
+        
+        filename = f'''{self.file.name}.npy'''
+        
+        try:
+            stored_embeddings = np.load(filename)
+            self.embeddings = stored_embeddings
+        except:
+            self.embeddings = []
+            for page in self.pages:
+                response = openai.Embedding.create(input=page, engine='text-embedding-ada-002')    
+                self.embeddings.append(response['data'][0]['embedding'])
+            all_embeddings = np.array(self.embeddings)
+            np.save(filename, all_embeddings)
 
     def getSimilarities(self,text):
         newtext = text.replace("\n", " ")

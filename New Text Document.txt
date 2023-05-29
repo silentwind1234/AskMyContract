@@ -1,0 +1,43 @@
+Please answer with one word BRC3, BRC2, BRC1 based on the following Criteria.
+
+BRC3:
+Any liability greater than 100 % of the contract price (SE scope) OR
+Unlimited liability for gross negligence in jurisdictions where such limitation/ exclusion is enforceable and Such liability is not an exception to the disclaimer of consequential/indirect losses and  Definition of gross negligence is acceptable
+
+BRC2:
+Any liability greater than 200 % of the contract price (SE scope)
+
+OR 
+
+Unlimited liability for gross negligence in jurisdictions where such limitation/ exclusion is enforceable and  Such liability is not an exception to the disclaimer of consequential/indirect losses and Definition of gross negligence is not acceptable
+
+OR
+
+Unlimited liability for gross negligence in jurisdictions where such limitation/ exclusion is enforceable and Such liability is an exception to the disclaimer of consequential/indirect losses and
+Definition of gross negligence is acceptable.
+
+BRC1:
+Any liability greater than 200 % of the contract price (SE scope)
+
+OR
+
+Unlimited liability for gross negligence in jurisdictions where such limitation/ exclusion is enforceable and Such liability is an exception to the disclaimer of consequential/indirect losses and
+Definition of gross negligence is not acceptable
+
+Disclaimer:
+The following exceptions/exclusions do not require any approval and do not have to be considered when determining the cap for the overall liability
+
+ as per (requested) LoA mandate (refer to financial questionnaire 2.8.1)
+mandatory/strict product liability,
+ mandatory third party claims for bodily injury and death or damage to property,
+ willful misconduct or fraud,
+ the cost for fulfillment of the contract by SE
+ the cost for rectification of defects by SE,
+ third party intellectual property rights infringements,
+ obligations under title warranty,
+ indemnity for taxes imposed on SE by law,
+ indemnity for fines and penalties for violation of applicable laws other than oil related pollution,
+ breach of confidentiality,
+ repayment of the contract price in the case of a rescission if rescission is LoA approved,
+ mutual indemnification provision (knock for knock) provided that corresponding insurance coverage is in place as confirmed by the corporate insurance department
+ gross negligence in jurisdictions where a limitation is not enforceable.
