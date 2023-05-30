@@ -26,6 +26,7 @@ class pdfFile:
         self.file = file
         self.pages = []
         self.embeddings = []
+        self.similarities = []
     def check(self):
         try:
             PdfReader(self.file)
@@ -39,6 +40,7 @@ class pdfFile:
             content = content.replace("\n", " ")
             content = content.replace("  ", " ")
             self.pages.append(content)
+        return self.pages
     
     def getCost(self):
         totalTokens = 0
@@ -66,13 +68,17 @@ class pdfFile:
         newtext = text.replace("\n", " ")
         newtext = newtext.replace("  ", " ")
         ques = openai.Embedding.create(input=newtext, engine='text-embedding-ada-002')['data'][0]['embedding']
-        similarities = []
+        self.similarities = []
         for embedding in self.embeddings:
-            similarities.append(cosine_similarity(ques,embedding))
-        return similarities
+            self.similarities.append(cosine_similarity(ques,embedding))
+        return self.similarities
     
     def getMaxSimilarity(self,text):
         if len(self.embeddings) == 0:
             return ""
         max_i = np.argmax(self.getSimilarities(text=text))
-        return self.pages[max_i]
+        st.code(self.similarities[max_i])
+        if self.similarities[max_i] < 0.6:
+            return ""
+        else:
+            return self.pages[max_i]

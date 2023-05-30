@@ -13,3 +13,4 @@ tiktoken==0.3.0
 llama-index==0.4.33
 langchain==0.0.129
 altair==4
+streamlit-chat==0.0.2.2
