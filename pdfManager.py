@@ -24,6 +24,7 @@ encoding = tiktoken.get_encoding(EMBEDDING_ENCODING)
 class pdfFile:
     def __init__(self,file:str) -> None:
         self.file = file
+        self.sentences = []
         self.pages = []
         self.embeddings = []
         self.similarities = []
@@ -35,10 +36,16 @@ class pdfFile:
             return False
     def loadPages(self):
         reader = PdfReader(self.file)
+        self.sentences = []
+        self.pages = []
         for page in reader.pages:
             content = page.extract_text()
             content = content.replace("\n", " ")
             content = content.replace("  ", " ")
+            splited = content.split(".")
+
+            self.sentences += [item for item in splited if len(item) > 10]
+            
             self.pages.append(content)
         return self.pages
     
@@ -77,8 +84,22 @@ class pdfFile:
         if len(self.embeddings) == 0:
             return ""
         max_i = np.argmax(self.getSimilarities(text=text))
-        st.code(self.similarities[max_i])
+        
         if self.similarities[max_i] < 0.6:
             return ""
         else:
             return self.pages[max_i]
+        
+    def getMaxSimilaritySentences(self,text,top:int):
+        if len(self.embeddings) == 0:
+            return ""
+        searchStr = []
+        sorted_values = np.argsort(-self.getSimilarities(text=text))
+        for x in range(top):
+            if x < len(sorted_values):
+                searchStr.append(self.sentences[sorted_values[x]])
+        st.code("\n".join(searchStr))
+        if len(searchStr) > 0:
+            return ""
+        else:
+            return "\n".join(searchStr)

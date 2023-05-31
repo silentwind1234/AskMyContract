@@ -75,7 +75,7 @@ def generate_response(prompt,file:pdfFile):
         pass
     else:
         formatedPrompt = f"""
-            Contract Page:
+            Contract page:
             {page}
             
             The above contract page is part of a contract between Siemens energy (as the contractor) and the Owner.
