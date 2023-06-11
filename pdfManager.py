@@ -24,6 +24,7 @@ encoding = tiktoken.get_encoding(EMBEDDING_ENCODING)
 class pdfFile:
     def __init__(self,file:str) -> None:
         self.file = file
+        self.fullText = ""
         self.sentences = []
         self.pages = []
         self.embeddings = []
@@ -38,6 +39,7 @@ class pdfFile:
         reader = PdfReader(self.file)
         self.sentences = []
         self.pages = []
+        self.fullText = ""
         for page in reader.pages:
             content = page.extract_text()
             content = content.replace("\n", " ")
@@ -47,6 +49,7 @@ class pdfFile:
             self.sentences += [item for item in splited if len(item) > 10]
             
             self.pages.append(content)
+        self.fullText = " ".join(self.pages)
         return self.pages
     
     def getCost(self):
