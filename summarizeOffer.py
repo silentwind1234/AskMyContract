@@ -12,6 +12,8 @@ from pdfManager import pdfFile
 from promptManager import Prompt
 import pandas as pd
 import json
+import fitz
+import sys
 # Load environment variables
 load_dotenv()
 
@@ -49,6 +51,7 @@ if files is not None:
         answerArea.empty()
         answerArea.info(f'''Loading {counter} of {len(files)} Please Wait...''')
         pdf = pdfFile(file)
+        
         pdfFileValid = pdf.check()
         if not pdfFileValid:
             answerArea.empty()
@@ -94,7 +97,7 @@ if askBtn and pdfFileValid and ready:
     df = pd.DataFrame(np_array,columns=["Supplier","Value","Currency","Validity","Delivery Period","Warrenty","Scope","Special conditions"])
     answerArea.empty()
     answerArea.info("Result Exported to CSV file")
-    df.to_csv('offers1.csv', encoding='utf-8', index=False)
+    df.to_csv('offers.csv', encoding='utf-8', index=False)
 else:
     if not ready:
         answerArea.empty()

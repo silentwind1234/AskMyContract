@@ -10,6 +10,8 @@ from dotenv import load_dotenv
 from openai.embeddings_utils import cosine_similarity
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 import streamlit as st
+import fitz
+import sys
 # Load environment variables
 
 # Define embedding model and encoding
@@ -27,8 +29,10 @@ class pdfFile:
         self.fullText = ""
         self.sentences = []
         self.pages = []
+        self.blocks = []
         self.embeddings = []
         self.similarities = []
+        
     def check(self):
         try:
             PdfReader(self.file)
@@ -40,6 +44,7 @@ class pdfFile:
         self.sentences = []
         self.pages = []
         self.fullText = ""
+        
         for page in reader.pages:
             content = page.extract_text()
             content = content.replace("\n", " ")
@@ -62,17 +67,17 @@ class pdfFile:
     def createEmbeddings(self):
         
         filename = f'''{self.file.name}.npy'''
-        
-        try:
-            stored_embeddings = np.load(filename)
-            self.embeddings = stored_embeddings
-        except:
-            self.embeddings = []
-            for page in self.pages:
-                response = openai.Embedding.create(input=page, engine='text-embedding-ada-002')    
-                self.embeddings.append(response['data'][0]['embedding'])
-            all_embeddings = np.array(self.embeddings)
-            np.save(filename, all_embeddings)
+        if len(self.pages) > 0:
+            try:
+                stored_embeddings = np.load(filename)
+                self.embeddings = stored_embeddings
+            except:
+                self.embeddings = []
+                for page in self.pages:
+                    response = openai.Embedding.create(input=page, engine='text-embedding-ada-002')    
+                    self.embeddings.append(response['data'][0]['embedding'])
+                all_embeddings = np.array(self.embeddings)
+                np.save(filename, all_embeddings)
 
     def getSimilarities(self,text):
         newtext = text.replace("\n", " ")
@@ -81,6 +86,7 @@ class pdfFile:
         self.similarities = []
         for embedding in self.embeddings:
             self.similarities.append(cosine_similarity(ques,embedding))
+        
         return self.similarities
     
     def getMaxSimilarity(self,text):
@@ -94,15 +100,18 @@ class pdfFile:
             return self.pages[max_i]
         
     def getMaxSimilaritySentences(self,text,top:int):
+        print(self.embeddings)
         if len(self.embeddings) == 0:
             return ""
         searchStr = []
-        sorted_values = np.argsort(-self.getSimilarities(text=text))
+        list = self.getSimilarities(text=text)
+        
+        sorted_values = np.argsort(-list)
         for x in range(top):
             if x < len(sorted_values):
-                searchStr.append(self.sentences[sorted_values[x]])
+                searchStr.append(self.blocks[sorted_values[x]])
         st.code("\n".join(searchStr))
         if len(searchStr) > 0:
             return ""
         else:
-            return "\n".join(searchStr)
+            return "\n\n".join(searchStr)

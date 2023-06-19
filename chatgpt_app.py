@@ -5,6 +5,8 @@ import streamlit as st
 from streamlit_chat import message
 from pdfManager import pdfFile
 
+import fitz
+import sys
 # Load environment variables
 load_dotenv()
 
@@ -40,7 +42,8 @@ if 'total_cost' not in st.session_state:
 # Sidebar - let user choose model, show total cost of current conversation, and let user clear the current conversation
 st.sidebar.title("Sidebar")
 uploaded_file = st.sidebar.file_uploader("Please choose a file", type="pdf")
-model_name = st.sidebar.radio("Choose a model:", ("GPT-3.5", "GPT-4"))
+model_name = "GPT-3.5" 
+# st.sidebar.radio("Choose a model:", ("GPT-3.5", "GPT-4"))
 counter_placeholder = st.sidebar.empty()
 counter_placeholder.write(f"Total cost of this conversation: ${st.session_state['total_cost']:.5f}")
 clear_button = st.sidebar.button("Clear Conversation", key="clear")
@@ -68,7 +71,7 @@ if clear_button:
 
 # generate a response
 def generate_response(prompt,file:pdfFile):
-    file.getMaxSimilarity(prompt)
+    
     page = file.getMaxSimilarity(text=prompt)
     formatedPrompt = prompt
     if page == "":
@@ -98,6 +101,8 @@ def generate_response(prompt,file:pdfFile):
     return response, total_tokens, prompt_tokens, completion_tokens
 
 if uploaded_file:
+    doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
+                
     pdf = pdfFile(uploaded_file)
     pdf.loadPages()
     pdf.createEmbeddings()
